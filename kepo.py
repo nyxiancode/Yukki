@@ -31,4 +31,8 @@ async def main():
     await app.run_polling()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    if loop.is_running():
+        loop.create_task(main())  # Jalankan sebagai task jika event loop sudah berjalan
+    else:
+        loop.run_until_complete(main())  # Jalankan normal jika event loop belum ada
