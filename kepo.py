@@ -1,9 +1,13 @@
 import asyncio
+import nest_asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
 # Token bot Anda
 BOT_TOKEN = "7542249132:AAHOM9hlpl4wImdC7Oq5mMKXfj7A7vCX6w8"
+
+# Mencegah konflik event loop
+nest_asyncio.apply()
 
 # Fungsi untuk menangani perintah /send
 async def send_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -31,11 +35,5 @@ async def main():
     await app.run_polling()
 
 if __name__ == "__main__":
-    try:
-        loop = asyncio.get_running_loop()  # Cek apakah event loop sudah berjalan
-    except RuntimeError:
-        loop = asyncio.new_event_loop()  # Jika belum ada, buat event loop baru
-        asyncio.set_event_loop(loop)
-
-    loop.create_task(main())  # Jalankan bot sebagai task
-    loop.run_forever()  # Biarkan loop berjalan terus
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())  # Jalankan bot dengan event loop yang sudah ada
